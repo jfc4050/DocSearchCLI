@@ -21,7 +21,6 @@ std::vector< std::pair<std::string, int> > mapToVector(std::map<std::string, int
     }
     return vectorOut;
 }
-{}
 
 std::vector<std::pair<std::string, int>> quickSortDictionary(std::vector<std::pair<std::string,int>>& unsorted,
                                                              std::vector<std::pair<std::string,int>>::iterator left,

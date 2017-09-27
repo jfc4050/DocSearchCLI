@@ -18,7 +18,7 @@
 
 class TxtSearcher {
 private:
-        std::ifstream inFile;
+    std::ifstream inFile;
 public:
     // NAIVE ALGORITHM
     int readAndCountNaive(const std::string& filePath, const std::string& query);
@@ -34,6 +34,10 @@ public:
 
     // Levenshtein Comparison with each word
     std::map<std::string, int> levenshteinEachWord(const std::string& filePath, const std::string& query, bool testing=false);
+
+    // Levenshtein Comparison with phrases
+    std::map<std::string, int> TxtSearcher::levenshteinPhrases(const std::string& filePath, const std::string& query);
+
 };
 
 #endif //DOCUMENTSEARCHER_TXTSEARCHER_H

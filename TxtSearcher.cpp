@@ -129,3 +129,15 @@ std::map<std::string, int> TxtSearcher::levenshteinEachWord(const std::string& f
     //returns map of key value pairs (each word, distance)
     return comparisons;
 }
+
+// Levenshtein Comparison with phrases
+std::map<std::string, int> TxtSearcher::levenshteinPhrases(const std::string& filePath, const std::string& query) {
+
+    inFile.open(filePath);
+    std::string phrase;
+    std::map<std::string, int> comparisons;
+
+
+
+    return comparisons;
+};
