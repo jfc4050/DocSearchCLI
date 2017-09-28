@@ -1,34 +1,39 @@
 #include <iostream>
+#include <ctime>
 #include "TxtSearcher.h"
+#include "TxtProcessor.h"
 
-void printMap(std::map<std::string,int> mapIn) {
-    for (const auto& pair : mapIn) {
-        std::cout << "LevenshteinDistance[" << pair.first << "] = " << pair.second << std::endl;
-    }
-}
-void printVector(std::vector<std::pair<std::string,int>> vecIn) {
+void printPairs(std::vector<std::pair<std::string,int>> vecIn) {
+    int pairs = 0;
     for (const auto& pair : vecIn) {
+        pairs++;
         std::cout << "LevenshteinDistance[" << pair.first << "] = " << pair.second << std::endl;
     }
+    std::cout << pairs << " pairs" << std::endl;
 }
 
 std::vector< std::pair<std::string, int> > mapToVector(std::map<std::string, int>& mapIn) {
 
-    std::vector< std::pair<std::string,int> > vectorOut;
+    std::vector< std::pair<std::string,int> > vectorOut(mapIn.size());
 
+    int i = 0;
     for (const auto& pair : mapIn) {
-        vectorOut.emplace_back(pair);
+        vectorOut[i] = pair;
+        i++;
     }
     return vectorOut;
 }
 
-std::vector<std::pair<std::string, int>> quickSortDictionary(std::vector<std::pair<std::string,int>>& unsorted,
-                                                             std::vector<std::pair<std::string,int>>::iterator left,
-                                                             std::vector<std::pair<std::string,int>>::iterator right) {
-
+void quickSortPairs(std::vector<std::pair<std::string,int>>& final,
+                    std::vector<std::pair<std::string,int>>::iterator left,
+                    std::vector<std::pair<std::string,int>>::iterator right)
+{
     if (right != left) {
-        //set pivot and boundary
-        auto pivot = left;
+
+        unsigned long randInt = rand() % std::distance(left, right);
+        auto pivot = left + randInt;
+        std::iter_swap(left, pivot);
+        pivot = left;
         auto boundary = left+1;
 
         //partition around pivot;
@@ -38,35 +43,32 @@ std::vector<std::pair<std::string, int>> quickSortDictionary(std::vector<std::pa
                 boundary++;
             }
         }
+
+        //put pivot element in rightful position
         boundary--;
         std::iter_swap(pivot, boundary);
 
-        quickSortDictionary(unsorted, left, boundary);
-        quickSortDictionary(unsorted, ++boundary, right);
+        quickSortPairs(final, left, boundary);
+        quickSortPairs(final, ++boundary, right);
     }
-    return unsorted;
 }
 
 
 int main() {
-    TxtSearcher* txt = new TxtSearcher;
-    std::string path = "/Users/justin/Desktop/sorcerersStone.txt";
-    std::map<std::string, int> output = txt->levenshteinEachWord(path, "justin");
+
+    int start_s = clock();
+    TxtProcessor* txt = new TxtProcessor("/Users/justin/Desktop/sorcerersStone.txt");
+    std::vector<std::string> output = txt->processTxt(false);
+
+    TxtSearcher* search = new TxtSearcher(output);
     delete txt;
 
-    std::vector<std::pair<std::string,int>> vectorResults = mapToVector(output);
-
-//    std::cout << "printing (unsorted) vector " << std::endl;
-//    printVector(vectorResults);
-//    std::cout << "\n";
-
-    std::vector<std::pair<std::string,int> > sorted = quickSortDictionary(vectorResults, vectorResults.begin(), vectorResults.end());
-
-    std::cout << "printing sorted vector:" << std::endl;
-    printVector(sorted);
-
-
-
+    std::vector<std::pair<std::string,int>> final = search->levenshteinFromVector("justin");
+    delete search;
+    quickSortPairs(final, final.begin(), final.end());
+    int stop_s = clock();
+    std::cout << "finished in: " << (stop_s-start_s)/double(CLOCKS_PER_SEC) << " seconds" << std::endl;
+    printPairs(final);
 
     return 0;
 }

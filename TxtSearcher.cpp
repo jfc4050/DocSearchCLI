@@ -4,6 +4,10 @@
 
 #include "TxtSearcher.h"
 
+TxtSearcher::TxtSearcher(std::vector<std::string>& dataIn) {
+    dataSource = dataIn;
+}
+
 // NAIVE ALGORITHM
 int TxtSearcher::readAndCountNaive(const std::string& filePath, const std::string& query) {
     //Generate Vector of words in query
@@ -72,6 +76,7 @@ int TxtSearcher::readAndCountRK(const std::string& filePath, const std::string& 
     return count;
 }
 
+
 // LEVENSHTEIN STRING COMPARISON
 int TxtSearcher::levenshteinDistance(const std::string& str, const std::string& target, bool testing) {
     int rows = (int) str.size() + 1;        //set array dimensions and declare
@@ -111,7 +116,9 @@ std::map<std::string, int> TxtSearcher::levenshteinEachWord(const std::string& f
     std::map<std::string, int> comparisons;
 
     int dist;
+    int wordcount = 0;
     while(inFile >> curWord) {
+        wordcount++;
         dist = levenshteinDistance(curWord, query);
 
         if (testing) {
@@ -126,18 +133,21 @@ std::map<std::string, int> TxtSearcher::levenshteinEachWord(const std::string& f
     }
     inFile.close();
 
-    //returns map of key value pairs (each word, distance)
+    std::cout << "word count: " << wordcount << std::endl;
+//    returns map of key value pairs (each word, distance)
     return comparisons;
 }
 
-// Levenshtein Comparison with phrases
-std::map<std::string, int> TxtSearcher::levenshteinPhrases(const std::string& filePath, const std::string& query) {
-
-    inFile.open(filePath);
-    std::string phrase;
-    std::map<std::string, int> comparisons;
-
-
-
-    return comparisons;
+// Levenshtein Comparison from vector
+std::vector<std::pair<std::string,int>> TxtSearcher::levenshteinFromVector(std::string query) {
+    std::vector<std::pair<std::string,int>> vectorMappings(dataSource.size());
+    int i = 0;
+    for (const std::string& word : dataSource) {
+        int dist;
+        dist = levenshteinDistance(word, query);
+        vectorMappings[i] = std::make_pair(word, dist);
+        i++;
+    }
+    return vectorMappings;
 };
+

@@ -5,6 +5,6 @@ cmake_minimum_required(VERSION 3.8)
 project(DocumentSearcher)
 
 set(CMAKE_CXX_STANDARD 17)
-set(SOURCE_FILES main.cpp TxtSearcher.cpp TxtSearcher.h)
+set(SOURCE_FILES main.cpp TxtSearcher.cpp TxtSearcher.h TxtProcessor.cpp TxtProcessor.h)
 
 add_executable(DocumentSearcher ${SOURCE_FILES})
