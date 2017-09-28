@@ -12,18 +12,6 @@ void printPairs(std::vector<std::pair<std::string,int>> vecIn) {
     std::cout << pairs << " pairs" << std::endl;
 }
 
-std::vector< std::pair<std::string, int> > mapToVector(std::map<std::string, int>& mapIn) {
-
-    std::vector< std::pair<std::string,int> > vectorOut(mapIn.size());
-
-    int i = 0;
-    for (const auto& pair : mapIn) {
-        vectorOut[i] = pair;
-        i++;
-    }
-    return vectorOut;
-}
-
 void quickSortPairs(std::vector<std::pair<std::string,int>>& final,
                     std::vector<std::pair<std::string,int>>::iterator left,
                     std::vector<std::pair<std::string,int>>::iterator right)
